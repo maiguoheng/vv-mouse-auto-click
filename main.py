@@ -7,7 +7,7 @@ from pynput import mouse, keyboard
 class AutoClickerApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("自动点击器")
+        self.root.title("自动点击器-vv出现")
         # 重复次数
         self.repeat_count = 9999999
         
@@ -72,17 +72,20 @@ class AutoClickerApp:
         for _ in range(self.repeat_count):
             if not self.running:
                 break
+            # 或者如果超过当天的23:59分，则break
+            if time.localtime().tm_hour >= 23 and time.localtime().tm_min >= 59:
+                break
             for x, y, interval in self.clicks:
                 if not self.running:
                     break
                 pyautogui.click(x, y)
-                time.sleep(interval)
+                time.sleep(0.1)
             cur_count += 1
             print('当前次数: %s, 剩余次数：%s' % (cur_count, self.repeat_count-cur_count))
         print('end 了')
         # 重置状态
         self.running = False
-        self.start_run_button.config(text="开始运行(重复%s次,按空格取消)" % self.repeat_count)
+        self.start_run_button.config(text="开始运行(重复%s次或23:59结束,按空格取消)" % self.repeat_count)
         self.start_run_button['state'] = 'normal'
         
     # mgh 这里的监听有问题！
